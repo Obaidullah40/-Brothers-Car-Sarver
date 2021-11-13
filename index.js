@@ -44,9 +44,9 @@ async function run() {
         });
 
         app.post("/services", async (req, res) => {
-            const service = req.body;
-            console.log("hit the api", service);
-            const result = await servicesCollection.insertOne(service);
+            const car = req.body;
+            console.log("hit the api", car);
+            const result = await servicesCollection.insertOne(car);
             console.log(result);
             res.json(result);
         });
