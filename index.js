@@ -1,7 +1,6 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
-const admin = require("firebase-admin");
 const cors = require("cors");
 const ObjectId = require("mongodb").ObjectId;
 
@@ -21,17 +20,6 @@ const client = new MongoClient(uri, {
 });
 
 
-// async function verifyToken(req, res, next) {
-//     if (req.headers?.authorization?.startsWith("Bearer ")) {
-//         const token = req.headers.authorization.split(" ")[1];
-
-//         try {
-//             const decodedUser = await admin.auth().verifyIdToken(token);
-//             req.decodedEmail = decodedUser.email;
-//         } catch {}
-//     }
-//     next();
-// }
 
 async function run() {
     try {
@@ -50,7 +38,6 @@ async function run() {
 
         app.get("/services/:id", async (req, res) => {
             const id = req.params.id;
-            console.log("getting specific service", id);
             const query = { _id: ObjectId(id) };
             const service = await servicesCollection.findOne(query);
             res.json(service);
@@ -61,6 +48,14 @@ async function run() {
             console.log("hit the api", service);
             const result = await servicesCollection.insertOne(service);
             console.log(result);
+            res.json(result);
+        });
+
+        app.delete("/services/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await servicesCollection.deleteOne(query);
+            console.log("deleting user with id ", result);
             res.json(result);
         });
 
