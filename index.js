@@ -40,6 +40,7 @@ async function run() {
         // const appointmentsCollection = database.collection("appointments");
         // const usersCollection = database.collection("users");
         const servicesCollection = database.collection("services");
+        const booksCollection = database.collection("books");
 
         app.get("/services", async (req, res) => {
             const cursor = servicesCollection.find({});
@@ -65,22 +66,21 @@ async function run() {
 
         // GET book
         app.get("/books", async (req, res) => {
-            const email = req.query.email;
-            const query = { email: email };
-            const cursor = booksCollection.find(query);
+            // const email = req.query.email;
+            // const query = { email: email };
+            const cursor = booksCollection.find({});
             const orders = await cursor.toArray();
             res.send(orders);
         });
 
-        // // GET BOOKING single api
-        // app.get("/books/:id", async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     // const query = {email: require.body.email}
+        app.post("/books", async (req, res) => {
+            const service = req.body;
+            // console.log("hit the api", service);
+            const orders = await booksCollection.insertOne(service);
+            // console.log(orders);
+            res.json(orders);
+        });
 
-        //     const offer = await booksCollection.findOne(query);
-        //     res.json(offer);
-        // });
 
         // app.get("/appointments", verifyToken, async (req, res) => {
         //     const email = req.query.email;
